@@ -1,13 +1,20 @@
 import * as React from "react"
-import { Link } from "gatsby"
+import { graphql, Link } from "gatsby"
 import { StaticImage } from "gatsby-plugin-image"
 
 import Layout from "../components/layout"
 import Seo from "../components/seo"
 
-const IndexPage = () => (
+const IndexPage = ({ data }) => (
   <Layout>
     <Seo title="Home" />
+    <ul>
+      {data.allMicrocmsBlog.edges.map(({ node }) => (
+        <li key={node.blogId}>
+          <Link to={`/blog/${node.blogId}`}>{node.title}</Link>
+        </li>
+      ))}
+    </ul>
     <h1>Hi people</h1>
     <p>Welcome to your new Gatsby site.</p>
     <p>Now go build something great.</p>
@@ -27,3 +34,16 @@ const IndexPage = () => (
 )
 
 export default IndexPage
+
+export const query = graphql`
+  query {
+    allMicrocmsBlog {
+      edges {
+        node {
+          blogId
+          title
+        }
+      }
+    }
+  }
+`
